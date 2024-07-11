@@ -6,7 +6,7 @@ impl AlgoRunner {
         AlgoRunner
     }
 
-    pub fn bfv_clob_algo() {
+    pub fn run_bfv_clob_algo() {
         println!("Running bfv clob algo");
     }
 }
