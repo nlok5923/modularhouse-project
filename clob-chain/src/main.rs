@@ -15,10 +15,10 @@ use std::io::Read;
 //     ext::sp_core::H256 as AvailH256,
 //     tx::{PairSigner, Payload},
 // };
-
+use anyhow::{anyhow, Context, Error};
+use reqwest;
 use std::str::FromStr;
 use tokio::*;
-use anyhow::{anyhow, Context, Error};
 
 // async fn send_tx(
 //     tx: Payload<SubmitData>,
@@ -51,7 +51,6 @@ use anyhow::{anyhow, Context, Error};
 //     Ok((block_hash, extrinsic_hash))
 // }
 
-
 #[tokio::main]
 async fn main() {
     // send data to avail first
@@ -76,6 +75,13 @@ async fn main() {
     // let call = api::tx().data_availability().submit_data(data);
 
     // let (block_hash, transaction_index) = send_tx(call, &signer, &client).await;
+    let route = "http://localhost:8080/submit_data";
+    let body = reqwest::get(route)
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
 
     println!("Submitted order data to avail");
 

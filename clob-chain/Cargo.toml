@@ -12,6 +12,7 @@ fhe-clob = { path = "../fhe-clob" }
 # subxt = { version = "0.34.0", features = ["substrate-compat"], optional = true }
 tokio = { version = "1.38.0", features = ["full"] }
 anyhow = "1.0.81"
+reqwest = "0.12.5"
 
 # [features]
 # default = ["native"]
