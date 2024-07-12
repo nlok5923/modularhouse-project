@@ -61,8 +61,8 @@ async fn main() {
     let file_path = "order.json";
     let mut file = File::open(file_path).expect("File not found");
 
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
+    let mut order_contents = String::new();
+    file.read_to_string(&mut order_contents)
         .expect("Failed to read file");
 
     // let client = AvailClient::new(ws).await.unwrap();
@@ -81,5 +81,5 @@ async fn main() {
 
     println!("Running algo!!");
     let algo_runner = AlgoRunner::new();
-    algo_runner.run_bfv_clob_algo(contents);
+    algo_runner.run_bfv_clob_algo(order_contents);
 }
