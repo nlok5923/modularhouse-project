@@ -44,9 +44,5 @@ fn main() {
     // extract the receipt.
     let receipt = prove_info.receipt;
 
-    // send data corresponding to the order
-
-
-    // send and verify the proof on ethereum 
-
+    println!("Generated receipt");
 }
