@@ -19,7 +19,7 @@ impl AlgoRunner {
         AlgoRunner
     }
 
-    pub fn run_bfv_clob_algo() {
+    pub fn run_bfv_clob_algo(self, contents: String) {
         println!("Running bfv clob algo");
 
         // plaintext modulus
@@ -44,15 +44,6 @@ impl AlgoRunner {
         let evaluator = Evaluator::new(params);
 
         let ek = EvaluationKey::new(evaluator.params(), &sk, &[0], &[0], &[1], &mut rng);
-
-        // Open and read the file containing the order
-        let file_path = "order.json";
-        let mut file = File::open(file_path).expect("File not found");
-
-        // Read the contents of the file into a string
-        let mut contents = String::new();
-        file.read_to_string(&mut contents)
-            .expect("Failed to read file");
 
         // Parse the JSON data into your data structure
         let order_data: Orders = serde_json::from_str(&contents).expect("Failed to parse JSON");
@@ -101,11 +92,15 @@ impl AlgoRunner {
             .map(|x| evaluator.encrypt(&sk, &x, &mut rng))
             .collect::<Vec<Ciphertext>>();
 
+        println!("Encrypted Buy Orders: {:?}", encrypted_buy_orders);
+
         // encrypting sell orders
         let encrypted_sell_orders: Vec<Ciphertext> = encoded_sell_orders
             .iter()
             .map(|x| evaluator.encrypt(&sk, &x, &mut rng))
             .collect::<Vec<Ciphertext>>();
+
+        println!("Encrypted Sell Orders: {:?}", encrypted_buy_orders);
 
         // summing up buy order value
         let sum_buy_orders = encrypted_buy_orders
