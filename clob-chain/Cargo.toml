@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 fhe-clob = { path = "../fhe-clob" }
+avail-subxt = { git = "https://github.com/availproject/avail", branch = "old_develop", default-features = false, features = ["std"]}

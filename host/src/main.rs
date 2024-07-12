@@ -11,20 +11,18 @@ fn main() {
         .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
         .init();
 
-    let ws = "	wss://turing-rpc.avail.so/ws".to_string();
-
     // post batch data to avail
 
-    let file_path = "order.json";
-    let mut file = File::open(file_path).expect("File not found");
+    // let file_path = "order.json";
+    // let mut file = File::open(file_path).expect("File not found");
 
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Failed to read file");
+    // let mut contents = String::new();
+    // file.read_to_string(&mut contents)
+    //     .expect("Failed to read file");
 
-    let algo_runner = AlgoRunner::new();
+    // let algo_runner = AlgoRunner::new();
 
-    algo_runner.run_bfv_clob_algo(contents);
+    // algo_runner.run_bfv_clob_algo(contents);
 
     // For example:
     let input: u32 = 15 * u32::pow(2, 27) + 1;
