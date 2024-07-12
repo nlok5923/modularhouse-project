@@ -13,4 +13,7 @@ fn main() {
     let algo_runner = AlgoRunner::new();
 
     algo_runner.run_bfv_clob_algo(contents);
+
+    // send data to avail 
+    
 }
