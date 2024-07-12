@@ -7,12 +7,8 @@ edition = "2021"
 
 [dependencies]
 fhe-clob = { path = "../fhe-clob" }
-# avail-subxt = { git = "https://github.com/availproject/avail", branch = "main", default-features = false, features = ["api-dev", "native", "std"], optional = true }
-# avail-core = { git = "https://github.com/availproject/avail-core", tag = "node-v2220-rc1", default-features = false, features = ["runtime", "serde"]  }
-# subxt = { version = "0.34.0", features = ["substrate-compat"], optional = true }
+avail-subxt = { git = "https://github.com/availproject/avail", branch = "main", default-features = false, features = ["api-dev", "native", "std"] }
+avail-core = { git = "https://github.com/availproject/avail-core", tag = "node-v2220-rc1", default-features = false, features = ["runtime", "serde"] }
+subxt = { version = "0.34.0", features = ["substrate-compat"] }
 tokio = { version = "1.38.0", features = ["full"] }
 anyhow = "1.0.81"
-
-# [features]
-# default = ["native"]
-# native = ["avail-subxt", "subxt"]
