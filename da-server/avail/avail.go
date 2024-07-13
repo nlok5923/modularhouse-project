@@ -79,7 +79,6 @@ func DataSubmit(size int, ApiURL string, Seed string, AppID int, blockDetails st
 		return types.Hash{}, fmt.Errorf("cannot sign:%w", err)
 	}
 
-	fmt.Println("got here")
 	// Send the extrinsic
 	sub, err := api.RPC.Author.SubmitAndWatchExtrinsic(ext)
 	if err != nil {
