@@ -75,8 +75,9 @@ async fn main() {
     // let call = api::tx().data_availability().submit_data(data);
 
     // let (block_hash, transaction_index) = send_tx(call, &signer, &client).await;
-    let route = "http://localhost:8080/submit_data";
-    let body = reqwest::get(route)
+    let route_submit_blob = "http://localhost:8080/submit_data";
+    let route_gen_proof = "http://127.0.0.1:8081/gen_proof";
+    let body = reqwest::get(route_submit_blob)
         .await
         .unwrap()
         .text()
@@ -88,4 +89,14 @@ async fn main() {
     println!("Running algo!!");
     let algo_runner = AlgoRunner::new();
     algo_runner.run_bfv_clob_algo(order_contents);
+
+    println!("Requested Proof Generation");
+    let body = reqwest::get(route_gen_proof)
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+    println!("Proof Generated");
+    // generate proof for the algo
 }

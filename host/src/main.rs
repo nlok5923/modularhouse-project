@@ -1,28 +1,14 @@
+use actix_web::Error;
+use actix_web::{get, web, App, HttpServer, Responder, HttpResponse, http::StatusCode};
 use fhe_clob::algo::AlgoRunner;
 use methods::{FHE_ORDERBOOK_ELF, FHE_ORDERBOOK_ID};
 use risc0_zkvm::{default_prover, ExecutorEnv};
 use std::fs::File;
 use std::io::Read;
 
-
-fn main() {
-    // Initialize tracing. In order to view logs, run `RUST_LOG=info cargo run`
-    tracing_subscriber::fmt()
-        .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
-        .init();
-
-    // post batch data to avail
-
-    // let file_path = "order.json";
-    // let mut file = File::open(file_path).expect("File not found");
-
-    // let mut contents = String::new();
-    // file.read_to_string(&mut contents)
-    //     .expect("Failed to read file");
-
-    // let algo_runner = AlgoRunner::new();
-
-    // algo_runner.run_bfv_clob_algo(contents);
+#[get("/gen_proof")]
+async fn generate_proof() -> Result<HttpResponse, Error> {
+    println!("Received Proof generation request");
 
     // For example:
     let input: u32 = 15 * u32::pow(2, 27) + 1;
@@ -32,15 +18,33 @@ fn main() {
         .build()
         .unwrap();
 
-    // Obtain the default prover.
     let prover = default_prover();
 
-    // Proof information by proving the specified ELF binary.
-    // This struct contains the receipt along with statistics about execution of the guest
     let prove_info = prover.prove(env, FHE_ORDERBOOK_ELF).unwrap();
 
-    // extract the receipt.
     let receipt = prove_info.receipt;
+    println!("Proof Receipt: {:?}", receipt);
+    println!("Proof Generated");
+    return Ok(HttpResponse::build(StatusCode::OK).json(
+        serde_json::json!({
+            "Success": true,
+        }),    
+    ));
+}
 
-    println!("Generated receipt");
+#[actix_web::main]
+async fn main() {
+    // Initialize tracing. In order to view logs, run `RUST_LOG=info cargo run`
+    tracing_subscriber::fmt()
+        .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
+        .init();
+
+    println!("Running prover on 8081");
+
+    HttpServer::new(|| App::new().service(generate_proof))
+        .bind(("127.0.0.1", 8081))
+        .unwrap()
+        .run()
+        .await;
+
 }

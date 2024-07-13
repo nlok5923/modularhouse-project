@@ -43,8 +43,6 @@ func main() {
 		log.Fatalf("failed to marshal JSON: %s", err)
 	}
 
-	fmt.Println("Order data: %v", string(jsonString))
-
 	http.HandleFunc("/submit_data", func(w http.ResponseWriter, r *http.Request) {
 		avail.DataSubmit(10, "wss://turing-rpc.avail.so/ws", "bulk impact process private orange motion roof force clean recall filter secret", 0, string(jsonString))
 		println("Data submitted to Avail")
