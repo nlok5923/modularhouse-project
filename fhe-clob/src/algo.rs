@@ -28,8 +28,6 @@ impl AlgoRunner {
         // no of slots
         let slots = 1 << 4;
 
-        println!("slots: {}", slots);
-
         let mut rng = thread_rng();
 
         let mut params = BfvParameters::new(&[60; 10], t, slots);
@@ -39,11 +37,13 @@ impl AlgoRunner {
 
         // generate secret key
         let sk = SecretKey::random_with_params(&params, &mut rng);
+        println!("Generated random secret key");
 
         // Create evaluator to evaluate arithmetic operarions
         let evaluator = Evaluator::new(params);
 
         let ek = EvaluationKey::new(evaluator.params(), &sk, &[0], &[0], &[1], &mut rng);
+        println!("Generate evaluation key");
 
         // Parse the JSON data into your data structure
         let order_data: Orders = serde_json::from_str(&contents).expect("Failed to parse JSON");
@@ -51,6 +51,8 @@ impl AlgoRunner {
         // plain buy and sell orders
         let buy_orders_plain = order_data.buy_orders;
         let sell_orders_plain = order_data.sell_orders;
+        println!("Buy Orders for USDC/USDT pair: {:?}", buy_orders_plain);
+        println!("Sell Orders for USDC/USDT pair : {:?}", sell_orders_plain);
 
         let order_len = buy_orders_plain.len();
 
@@ -92,7 +94,7 @@ impl AlgoRunner {
             .map(|x| evaluator.encrypt(&sk, &x, &mut rng))
             .collect::<Vec<Ciphertext>>();
 
-        println!("Encrypted Buy Orders: {:?}", encrypted_buy_orders);
+        println!("Encrypted Buy Order: {:?}", encrypted_buy_orders[0]);
 
         // encrypting sell orders
         let encrypted_sell_orders: Vec<Ciphertext> = encoded_sell_orders
@@ -100,7 +102,7 @@ impl AlgoRunner {
             .map(|x| evaluator.encrypt(&sk, &x, &mut rng))
             .collect::<Vec<Ciphertext>>();
 
-        println!("Encrypted Sell Orders: {:?}", encrypted_buy_orders);
+        // println!("Encrypted Sell Orders: {:?}", encrypted_buy_orders);
 
         // summing up buy order value
         let sum_buy_orders = encrypted_buy_orders
@@ -120,6 +122,7 @@ impl AlgoRunner {
 
         let is_buy_sum_less_encrypted =
             univariate_less_than(&evaluator, &sum_buy_orders, &sum_sell_orders, &ek, &sk);
+
         let is_buy_sum_less_plain = evaluator.plaintext_decode(
             &evaluator.decrypt(&sk, &is_buy_sum_less_encrypted),
             Encoding::default(),

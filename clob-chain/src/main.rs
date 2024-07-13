@@ -64,6 +64,9 @@ async fn main() {
     file.read_to_string(&mut order_contents)
         .expect("Failed to read file");
 
+
+    println!("Received Orders");
+
     // let client = AvailClient::new(ws).await.unwrap();
     // let mnemonic = "bulk impact process private orange motion roof force clean recall filter secret";
     // let app_id = 0;
