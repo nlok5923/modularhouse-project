@@ -8,12 +8,21 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 type Orders struct {
 	SellOrders []int  `json:"sell_orders"`
 	BuyOrders  []int  `json:"buy_orders"`
 	Pair       string `json:"pair"`
+}
+
+func waitForData() {
+	for {
+		fmt.Println("Waiting for Data to be submitted")
+		// Wait for 10 seconds
+		time.Sleep(2 * time.Second)
+	}
 }
 
 func main() {
@@ -42,6 +51,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to marshal JSON: %s", err)
 	}
+
+	go waitForData()
 
 	http.HandleFunc("/submit_data", func(w http.ResponseWriter, r *http.Request) {
 		avail.DataSubmit(10, "wss://turing-rpc.avail.so/ws", "bulk impact process private orange motion roof force clean recall filter secret", 0, string(jsonString))
